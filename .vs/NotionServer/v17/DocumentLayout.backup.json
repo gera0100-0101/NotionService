@@ -1,0 +1,103 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{60314295-0D2F-417E-8BD6-3EBC19196B94}|NotionServer\\NotionServer.csproj|c:\\users\\viktor gerasimenko 2\\source\\repos\\notionserver\\notionserver\\timehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60314295-0D2F-417E-8BD6-3EBC19196B94}|NotionServer\\NotionServer.csproj|solutionrelative:notionserver\\timehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60314295-0D2F-417E-8BD6-3EBC19196B94}|NotionServer\\NotionServer.csproj|c:\\users\\viktor gerasimenko 2\\source\\repos\\notionserver\\notionserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60314295-0D2F-417E-8BD6-3EBC19196B94}|NotionServer\\NotionServer.csproj|solutionrelative:notionserver\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60314295-0D2F-417E-8BD6-3EBC19196B94}|NotionServer\\NotionServer.csproj|c:\\users\\viktor gerasimenko 2\\source\\repos\\notionserver\\notionserver\\controllers\\timecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60314295-0D2F-417E-8BD6-3EBC19196B94}|NotionServer\\NotionServer.csproj|solutionrelative:notionserver\\controllers\\timecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60314295-0D2F-417E-8BD6-3EBC19196B94}|NotionServer\\NotionServer.csproj|c:\\users\\viktor gerasimenko 2\\source\\repos\\notionserver\\notionserver\\timeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60314295-0D2F-417E-8BD6-3EBC19196B94}|NotionServer\\NotionServer.csproj|solutionrelative:notionserver\\timeservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60314295-0D2F-417E-8BD6-3EBC19196B94}|NotionServer\\NotionServer.csproj|c:\\users\\viktor gerasimenko 2\\source\\repos\\notionserver\\notionserver\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60314295-0D2F-417E-8BD6-3EBC19196B94}|NotionServer\\NotionServer.csproj|solutionrelative:notionserver\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TimeHub.cs",
+              "DocumentMoniker": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\NotionServer\\TimeHub.cs",
+              "RelativeDocumentMoniker": "NotionServer\\TimeHub.cs",
+              "ToolTip": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\NotionServer\\TimeHub.cs",
+              "RelativeToolTip": "NotionServer\\TimeHub.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T20:14:49.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\NotionServer\\Program.cs",
+              "RelativeDocumentMoniker": "NotionServer\\Program.cs",
+              "ToolTip": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\NotionServer\\Program.cs",
+              "RelativeToolTip": "NotionServer\\Program.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwB0AAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T15:49:41.002Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TimeController.cs",
+              "DocumentMoniker": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\NotionServer\\Controllers\\TimeController.cs",
+              "RelativeDocumentMoniker": "NotionServer\\Controllers\\TimeController.cs",
+              "ToolTip": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\NotionServer\\Controllers\\TimeController.cs",
+              "RelativeToolTip": "NotionServer\\Controllers\\TimeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T15:46:09.257Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TimeService.cs",
+              "DocumentMoniker": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\NotionServer\\TimeService.cs",
+              "RelativeDocumentMoniker": "NotionServer\\TimeService.cs",
+              "ToolTip": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\NotionServer\\TimeService.cs",
+              "RelativeToolTip": "NotionServer\\TimeService.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAgwCEAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T14:38:34.743Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\NotionServer\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "NotionServer\\Controllers\\WeatherForecastController.cs",
+              "ToolTip": "C:\\Users\\Viktor Gerasimenko 2\\source\\repos\\NotionServer\\NotionServer\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "NotionServer\\Controllers\\WeatherForecastController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-05T11:52:17.534Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

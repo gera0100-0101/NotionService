@@ -1,0 +1,12 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tsconfigPaths from "vite-tsconfig-paths"
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react(), tsconfigPaths()],
+  server: {
+    port: 5002, // меняем порт с 5173 на 5002
+    strictPort: true // если порт занят — ошибка, не выбирать другой
+  }
+})

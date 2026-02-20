@@ -1,0 +1,36 @@
+.header {
+  height: 56px;
+  background-color: #192731;
+  border-bottom: 1px solid #4f6172;
+}
+  .header h3{
+    color: var(--mantine-color-white);
+  }
+.inner {
+  height: 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link {
+  display: block;
+  line-height: 1;
+  padding: 8px 12px;
+  border-radius: var(--mantine-radius-sm);
+  text-decoration: none;
+  color: var(--mantine-color-white);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+}
+
+/* обычный hover */
+.link:hover {
+  background-color: #4f6172;
+}
+
+/* активная ссылка */
+.link[data-active] {
+  background-color: #ff096c;;
+  color: var(--mantine-color-white);
+}
