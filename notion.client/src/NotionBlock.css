@@ -1,0 +1,38 @@
+.notionBlock{
+    padding-top: 2%;
+    padding-bottom: 5%;
+    padding-left: 10%;
+    padding-right: 10%;
+    margin-top: 50px;
+    margin-left: 10%;
+    margin-right: 10%;
+    border: 3px solid #4f6172;
+    border-radius: 20px;
+}
+
+.notion{
+    display: flex;
+    justify-content: space-between;
+}
+    .notion h1{
+        color: azure;
+    }
+    .notion p{
+        color: azure;
+    }
+
+.notionText{
+    max-width: 600px;
+}
+
+/* .notionNavi{
+    
+} */
+
+.block{
+    padding-top: 5%;
+}
+
+.tabButton:hover{
+    background-color: #4f6172;
+}

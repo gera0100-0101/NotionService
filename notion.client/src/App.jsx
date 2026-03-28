@@ -1,19 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import {HeaderSimple} from './Header';
 import CalendarPage from './Pages/CalendarPage'
+import { DataTime } from './DataTime';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div>
+    <DataTime>
       <HeaderSimple></HeaderSimple>
       <CalendarPage></CalendarPage>
-    </div>
+    </DataTime>
   )
 }
 
-export default App
+export default App;

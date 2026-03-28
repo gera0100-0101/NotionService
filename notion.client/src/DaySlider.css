@@ -1,0 +1,14 @@
+.daySlider{
+    padding: 10%;
+    display: grid;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* border: 3px solid pink; */
+}
+    .daySlider h1{
+        margin: 0 auto;
+        color: azure;
+    }

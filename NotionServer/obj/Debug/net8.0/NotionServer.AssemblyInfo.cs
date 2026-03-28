@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NotionServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+62ce584d1f3ff942451bd33b515f11315b86947d")]
 [assembly: System.Reflection.AssemblyProductAttribute("NotionServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NotionServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

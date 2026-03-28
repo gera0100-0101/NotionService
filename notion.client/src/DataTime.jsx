@@ -1,39 +1,34 @@
-import { HubConnectionBuilder } from "@microsoft/signalr";
-import {useState, useEffect} from "react";
+import {createContext, useState, useEffect} from "react";
 
-export function DataTime(){
-    const [time, setTime] = useState(null);
+export const TimeContext = createContext();
+
+export function DataTime({children}){
+    const [ws, setWs] = useState(null);
+    const [messages, setMessages] = useState([]);
 
     useEffect(() => {
-        let connection = new HubConnectionBuilder()
-        .withUrl("http://localhost:32768/timeHub")
-        .withAutomaticReconnect()
-        .build();
+        const socket = new WebSocket("http://127.0.0.1:8000/ws")
 
-        connection.on("ReceiveTime", (time) => {
-            setTime(time)
-        });
-
-        const startConnection = async () => {
-            try{
-            await connection.start();
-            await connection.invoke("GetTime", "hello")
-            }
-            catch(error){
-                console.log(error);
-            }
+        socket.onopen = () => {
+            console.log("connected");
         };
 
-        startConnection();
-
-        return () => {
-            connection.stop();
+        socket.onmessage = (event) => {
+            setMessages(JSON.parse(event.data));
         };
+
+        socket.onclose = () => {
+            console.log("disconnected");
+        };
+
+        setWs(socket);
+
+        return () => socket.close();
     }, []);
 
     return(
-        <div>
-            <p>{time}</p>
-        </div>
+        <TimeContext.Provider value={{messages}}>
+            {children}
+        </TimeContext.Provider>
     )
 }
