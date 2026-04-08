@@ -20,6 +20,6 @@ fastApi/
  └─ main.py
 
 ```
-api/ folder has an Rest/Websocket endpoints
-services/ floder has an services with backend logic
-main.py is the main script that start the whole backend app
+api/ folder has an Rest/Websocket endpoints<br>
+services/ floder has an services with backend logic<br>
+main.py is the main script that start the whole backend app<br>
