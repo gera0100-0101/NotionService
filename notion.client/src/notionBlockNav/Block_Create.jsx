@@ -118,7 +118,7 @@ function LoopNotion(){
         }
         {value === "everyMonth" &&
             <div>
-                <NativeSelect label="Выберите день недели" mt="lg"
+                <NativeSelect label="Выберите день месяца" mt="lg"
                 data={days} 
                 />
                 <TimeInput mt="lg"
