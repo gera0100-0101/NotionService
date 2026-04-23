@@ -1,5 +1,5 @@
 import { Slider } from '@mantine/core'
-import "./daySlider.css"
+import "./DaySlider.css"
 import { useState, useEffect, useContext } from 'react'
 import { TimeContext } from './DataTime'
 
