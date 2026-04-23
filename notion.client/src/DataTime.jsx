@@ -7,7 +7,7 @@ export function DataTime({children}){
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
-        const socket = new WebSocket("http://127.0.0.1:8000/ws")
+        const socket = new WebSocket("/auth/ws")
 
         socket.onopen = () => {
             console.log("connected");

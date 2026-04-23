@@ -16,8 +16,8 @@ class TimeService:
     def __init__(self):
         self.current_time = None
         self.URL = "https://timeapi.io/api/Time/current/zone?timeZone=Europe/Moscow"
-    
-    async def startTimeService(self):
+
+    async def start(self):
         async with httpx.AsyncClient() as client:
             while True:
                 r = await client.get(self.URL)
@@ -26,5 +26,5 @@ class TimeService:
 
     def get_time(self):
         return self.current_time
-    
+
 time_service = TimeService()

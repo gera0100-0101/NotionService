@@ -11,9 +11,16 @@ export default defineConfig({
         target: 'http://backend:8080',
         changeOrigin: true,
         secure: false
+      },
+      '/auth': {
+        target: 'http://backend0:8000',
+        changeOrigin: true,
+        secure: false,
+        ws: true
       }
+  }
     // port: 5002, // меняем порт с 5173 на 5002
     // strictPort: true // если порт занят — ошибка, не выбирать другой
   }
 }
-})
+)
