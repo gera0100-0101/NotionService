@@ -1,157 +1,324 @@
-import "../NotionBlock.css"
-import { Fieldset, TextInput, Group, Button, SegmentedControl, Switch, NativeSelect} from '@mantine/core';
-import { DateTimePicker, TimeInput } from '@mantine/dates';
-import { useState } from 'react';
-import '@mantine/dates/styles.css';
+import "../NotionBlock.css";
+import {
+    Fieldset,
+    TextInput,
+    Group,
+    Button,
+    SegmentedControl,
+    Switch,
+    NativeSelect
+} from "@mantine/core";
+
+import { DateTimePicker, TimeInput } from "@mantine/dates";
+import { useState } from "react";
+import "@mantine/dates/styles.css";
+import { useCreateNotion } from "../shared/NotionQueries.js";
 
 export default function NavCreate() {
-    const [value, setValue] = useState("notion");
+    const createNotion = useCreateNotion();
 
-  return (
-    <Fieldset legend="Создание" bg="#192731" radius="xl">
-        <TextInput label="Наименование" placeholder="Наименование" />
-        <TextInput label="Описание" placeholder="Описание" mt="md" />
+    const [mode, setMode] = useState("notion");
 
-        <SegmentedControl size="md" mt="lg" bg="#2a3843" color="#ff096c"
-            styles={{
-                label: {
-                color: 'white',
-                },
-            }}
-            value={value}
-            onChange={setValue}
-            data={[
-                {label: "Напоминание", value: "notion"},
-                {label: "Дедлайн", value: "deadLine"}
-                ]} 
-        />
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
 
-        {value === "notion" && <NotionValue></NotionValue>}
-        {value === "deadLine" && <DeadLineValue></DeadLineValue>}
-      <Group justify="flex-end" mt="md">
-        <Button bg="#ff096c">Создать напоминание</Button>
-      </Group>
-    </Fieldset>
-  );
-}
-
-function NotionValue(){
     const [checked, setChecked] = useState(false);
 
-    return(
+    const [cycleRange, setCycleRange] = useState("DAILY");
+    const [weekDayRepeat, setWeekDayRepeat] = useState("MONDAY");
+    const [timeRepeat, setTimeRepeat] = useState(null);
+
+    const [onceDate, setOnceDate] = useState(null);
+    const [deadlineDate, setDeadlineDate] = useState(null);
+
+    function buildDTO() {
+        if (mode === "deadLine") {
+            return {
+                name,
+                notionType: "DEADLINE",
+                isCycled: false,
+                cycleRange: null,
+                weekDayRepeat: null,
+                timeRepeat: deadlineDate ? toLocalTime(deadlineDate) : null,
+            };
+        }
+
+        if (cycleRange === "WEEKLY" && !weekDayRepeat) {
+            return null;
+        }
+
+        if (!checked) {
+            return {
+                name,
+                notionType: "NOTIFICATION",
+                isCycled: false,
+                cycleRange: null,
+                weekDayRepeat: null,
+                timeRepeat: onceDate ? toLocalTime(onceDate) : null,
+            };
+        }
+
+        return {
+            name,
+            notionType: "NOTIFICATION",
+            isCycled: true,
+            cycleRange,
+            weekDayRepeat,
+            timeRepeat,
+        };
+    }
+
+    function toLocalTime(date) {
+        const d = new Date(date);
+        return d.toTimeString().slice(0, 8); // HH:mm:ss для Spring LocalTime
+    }
+
+    return (
+        <Fieldset legend="Создание" bg="#192731" radius="xl">
+
+            <TextInput
+                label="Наименование"
+                placeholder="Наименование"
+                value={name}
+                onChange={(e) => setName(e.currentTarget.value)}
+            />
+
+            <TextInput
+                label="Описание"
+                placeholder="Описание"
+                value={description}
+                onChange={(e) => setDescription(e.currentTarget.value)}
+            />
+
+            <SegmentedControl
+                size="md"
+                mt="lg"
+                bg="#2a3843"
+                color="#ff096c"
+                styles={{
+                    label: {
+                        color: 'white',
+                    },
+                }}
+                value={mode}
+                onChange={setMode}
+                data={[
+                    { label: "Напоминание", value: "notion" },
+                    { label: "Дедлайн", value: "deadLine" }
+                ]}
+            />
+
+            {mode === "notion" && (
+                <NotionBlock
+                    checked={checked}
+                    setChecked={setChecked}
+                    cycleRange={cycleRange}
+                    setCycleRange={setCycleRange}
+                    weekDayRepeat={weekDayRepeat}
+                    setWeekDayRepeat={setWeekDayRepeat}
+                    timeRepeat={timeRepeat}
+                    setTimeRepeat={setTimeRepeat}
+                    onceDate={onceDate}
+                    setOnceDate={setOnceDate}
+                />
+            )}
+
+            {mode === "deadLine" && (
+                <DateTimePicker
+                    label="Выберите дату дедлайна"
+                    placeholder="Нажмите что бы выбрать дату"
+                    value={deadlineDate}
+                    onChange={setDeadlineDate}
+                    mt="lg"
+                    styles={{
+                        calendarHeader: {
+                            color: "black"
+                        },
+                        day: {
+                            color: "black"
+                        },
+                        weekday: {
+                            color: '#999',
+                        },
+                        month: {
+                            color: "black",
+                        },
+                        monthsList: {
+                            color: "black"
+                        }
+                    }}
+                />
+            )}
+
+            <Group justify="flex-end" mt="md">
+                <Button
+                    bg="#ff096c"
+                    onClick={() => {
+                        const dto = buildDTO();
+                        createNotion.mutate(dto);
+                    }}
+                >
+                    Создать напоминание
+                </Button>
+            </Group>
+
+        </Fieldset>
+    );
+}
+
+/* ===================== NOTION ===================== */
+
+function NotionBlock({
+                         checked,
+                         setChecked,
+                         cycleRange,
+                         setCycleRange,
+                         weekDayRepeat,
+                         setWeekDayRepeat,
+                         timeRepeat,
+                         setTimeRepeat,
+                         onceDate,
+                         setOnceDate
+                     }) {
+    return (
         <div>
-            <Switch mt="lg" color="#ff096c"
+            <Switch
+                mt="lg"
+                color="#ff096c"
                 checked={checked}
-                onChange={(event) => setChecked(event.currentTarget.checked)}
+                onChange={(e) => setChecked(e.currentTarget.checked)}
                 label="Цикличное напоминание"
             />
 
-            {checked === false && <OnceNotion></OnceNotion>}
-            {checked === true && <LoopNotion></LoopNotion>}
-
+            {!checked ? (
+                <DateTimePicker
+                    label="Выберите дату напоминания"
+                    placeholder="Нажмите что бы выбрать дату"
+                    value={onceDate}
+                    onChange={setOnceDate}
+                    mt="lg"
+                    styles={{
+                        calendarHeader: {
+                            color: "black"
+                        },
+                        day: {
+                            color: "black"
+                        },
+                        weekday: {
+                            color: '#999',
+                        },
+                        month: {
+                            color: "black",
+                        },
+                        monthsList: {
+                            color: "black"
+                        }
+                    }}
+                />
+            ) : (
+                <CycleBlock
+                    cycleRange={cycleRange}
+                    setCycleRange={setCycleRange}
+                    weekDayRepeat={weekDayRepeat}
+                    setWeekDayRepeat={setWeekDayRepeat}
+                    timeRepeat={timeRepeat}
+                    setTimeRepeat={setTimeRepeat}
+                />
+            )}
         </div>
-    )
+    );
 }
 
-function OnceNotion(){
-    return(
-        <DateTimePicker label="Выберите дату напоминания" placeholder="Нажмите что бы выбрать дату" mt="lg"
-            styles={{
-                calendarHeader:{
-                    color: "black"
-                },
-                day:{
-                    color: "black"
-                },
-                weekday: {
-                    color: '#999',
-                },
-                month:{
-                    color: "black",
-                },
-                monthsList:{
-                    color: "black"
-                }
-            }}
-        />
-    )
-}
+/* ===================== CYCLE ===================== */
 
-function LoopNotion(){
-    const [value, setValue] = useState("everyDay");
+function CycleBlock({
+                        cycleRange,
+                        setCycleRange,
+                        weekDayRepeat,
+                        setWeekDayRepeat,
+                        timeRepeat,
+                        setTimeRepeat
+                    }) {
     const days = Array.from({ length: 31 }, (_, i) => ({
-    value: String(i + 1),
-    label: String(i + 1),
+        value: String(i + 1),
+        label: String(i + 1),
     }));
-    
-    return(
+
+    return (
         <div>
-            <SegmentedControl size="md" mt="lg" bg="#2a3843" color="#ff096c"
-            styles={{
-                label: {
-                color: 'white',
-                },
-            }}
-            value={value}
-            onChange={setValue}
-            data={[
-                {label: "Ежедневно", value: "everyDay"},
-                {label: "Еженедельно", value: "everyWeek"},
-                {label: "Ежемесячно", value: "everyMonth"}
-                ]} 
-        />
-
-        {value === "everyDay" && 
-            <TimeInput mt="lg"
-            label="Введите время"
+            <SegmentedControl
+                size="md"
+                mt="lg"
+                bg="#2a3843"
+                color="#ff096c"
+                styles={{
+                    label: {
+                        color: 'white',
+                    },
+                }}
+                value={cycleRange}
+                onChange={setCycleRange}
+                data={[
+                    { label: "Ежедневно", value: "DAILY" },
+                    { label: "Еженедельно", value: "WEEKLY" },
+                    { label: "Ежемесячно", value: "MONTHLY" }
+                ]}
             />
-        }
-        {value === "everyWeek" &&
-            <div>
-                <NativeSelect label="Выберите день недели" mt="lg"
-                data={['Понедельник', 'Вторник', 'Среда', "Четверг", "Пятница", "Суббота", "Воскресенье"]} 
+
+            {cycleRange === "DAILY" && (
+                <TimeInput
+                    mt="lg"
+                    label="Введите время"
+                    value={timeRepeat}
+                    onChange={(e) => setTimeRepeat(e.currentTarget.value)}
                 />
-                <TimeInput mt="lg"
-                label="Введите время"
-                />
-            </div>
-        }
-        {value === "everyMonth" &&
-            <div>
-                <NativeSelect label="Выберите день месяца" mt="lg"
-                data={days} 
-                />
-                <TimeInput mt="lg"
-                label="Введите время"
-                />
-            </div>
-        }
+            )}
+
+            {cycleRange === "WEEKLY" && (
+                <>
+                    <NativeSelect
+                        mt="lg"
+                        label="Выберите день недели"
+                        value={weekDayRepeat}
+                        onChange={(e) => setWeekDayRepeat(e.currentTarget.value)}
+                        data={[
+                            { value: "MONDAY", label: "Понедельник" },
+                            { value: "TUESDAY", label: "Вторник" },
+                            { value: "WEDNESDAY", label: "Среда" },
+                            { value: "THURSDAY", label: "Четверг" },
+                            { value: "FRIDAY", label: "Пятница" },
+                            { value: "SATURDAY", label: "Суббота" },
+                            { value: "SUNDAY", label: "Воскресенье" }
+                        ]}
+                    />
+
+                    <TimeInput
+                        mt="lg"
+                        label="Введите время"
+                        value={timeRepeat}
+                        onChange={(e) => setTimeRepeat(e.currentTarget.value)}
+                    />
+                </>
+            )}
+
+            {cycleRange === "MONTHLY" && (
+                <>
+                    <NativeSelect
+                        mt="lg"
+                        label="Выберите день месяца"
+                        value={weekDayRepeat}
+                        onChange={(e) => setWeekDayRepeat(e.currentTarget.value)}
+                        data={days}
+                    />
+
+                    <TimeInput
+                        mt="lg"
+                        label="Введите время"
+                        value={timeRepeat}
+                        onChange={(e) => setTimeRepeat(e.currentTarget.value)}
+                    />
+                </>
+            )}
         </div>
-    )
-}
-
-
-
-function DeadLineValue(){
-    return(
-        <DateTimePicker label="Выберите дату дедлайна" placeholder="Нажмите что бы выбрать дату" mt="lg"
-            styles={{
-                calendarHeader:{
-                    color: "black"
-                },
-                day:{
-                    color: "black"
-                },
-                weekday: {
-                    color: '#999',
-                },
-                month:{
-                    color: "black",
-                },
-                monthsList:{
-                    color: "black"
-                }
-            }}
-        />
-    )
+    );
 }

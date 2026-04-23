@@ -14,16 +14,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  backend:
-    build: ./fastApi
-    container_name: fastapi_app
-    restart: always
-    depends_on:
-      - db
-    ports:
-      - "8000:8000"
-    environment:
-      DATABASE_URL: postgresql://admin:secret@db:5432/mydb
+  # backend:
+  #   build: ./fastApi
+  #   container_name: fastapi_app
+  #   restart: always
+  #   depends_on:
+  #     - db
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     DATABASE_URL: postgresql://admin:secret@db:5432/mydb
 
   frontend:
     build: ./notion.client
