@@ -2,16 +2,21 @@ import { Stepper } from "@mantine/core"
 import "../NotionBlock.css"
 import ReadOnlySlider from '../DaySlider'
 import { useNotions } from "../shared/NotionQueries.js";
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useMemo} from 'react'
 import { TimeContext } from '../DataTime'
 
 export default function NavNotion(){
     const [currentNotions, setCurrentNotions] = useState();
+
     const notions = useNotions();
     const {messages} = useContext(TimeContext);
-    console.log("TimeContext: " + messages.time);
-    console.log("output: " + notions?.data?.[0].timeRepeat);
 
+    const notionList = useMemo(() => {
+        return (notions?.data || []).filter(
+        n => n.notionType === "NOTIFICATION"
+        );
+    }, [notions?.data]);
+    
     const toMinutes = (t) => {
         if (typeof t !== "string") return null;
 
@@ -57,14 +62,22 @@ export default function NavNotion(){
     }
 
     useEffect(() => {
-        if (notions?.data && messages.time) {
-            const result = getNotionsByTime(notions.data, messages.time);
+        if (notionList && messages.time) {
+            const result = getNotionsByTime(notionList, messages.time);
             setCurrentNotions(result);
         }
-    }, [notions?.data, messages.time]);
+    }, [notionList, messages?.time]);
 
-    if(currentNotions != null){
-        return(
+    if (!notions?.data) {
+        return <p>Загрузка...</p>;
+    }
+
+    if (!currentNotions) {
+        return <p>Нет данных</p>;
+    }
+
+
+    return(
             <div className='notion'>
                 <Stepper active={1} orientation="vertical" color='#ff096c' size="lg"
                     styles={{
@@ -79,17 +92,16 @@ export default function NavNotion(){
                         },
                     }}
                     >
-                    <Stepper.Step label={currentNotions.afterNext.timeRepeat} description={currentNotions.afterNext.name} />
-                    <Stepper.Step label={currentNotions.next.timeRepeat} description={currentNotions.next.name} />
-                    <Stepper.Step label={currentNotions.past.timeRepeat} description={currentNotions.past.name} />
+                    <Stepper.Step label={currentNotions.afterNext?.timeRepeat || "-"} description={currentNotions.afterNext?.name || "-"} />
+                    <Stepper.Step label={currentNotions.next?.timeRepeat || "-"} description={currentNotions.next?.name || "-"} />
+                    <Stepper.Step label={currentNotions.past?.timeRepeat || "-"} description={currentNotions.past?.name || "-"} />
                 </Stepper>
                 <div className='notionText'>
-                    <h1>{currentNotions.next.name}</h1>
+                    <h1>{currentNotions.next?.name || "-"}</h1>
                     <p>Текст или описание для напоминания 1</p>
                     {currentNotions.isCycled ? <p>Цикличное напоминание: {currentNotions.weekDayRepeat}</p> : <p>Обычное напоминание</p>}
                 </div>
                 <ReadOnlySlider></ReadOnlySlider>
             </div>
         )
-    }
 }

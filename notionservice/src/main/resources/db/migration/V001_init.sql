@@ -5,5 +5,6 @@ create table notion (
     is_cycled boolean,
     cycle_range varchar(255) check (cycle_range in ('DAILY', 'WEEKLY', 'MONTHLY')),
     week_day_repeat varchar(255),
+    target_date timestamp,
     time_repeat time
 );

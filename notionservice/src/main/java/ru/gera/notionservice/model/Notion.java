@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -31,6 +33,9 @@ public class Notion {
 
     @Column(name = "week_day_repeat")
     private String weekDayRepeat;
+
+    @Column(name = "target_date")
+    private LocalDateTime targetDate;
 
     @Column(name = "time_repeat")
     private LocalTime timeRepeat;

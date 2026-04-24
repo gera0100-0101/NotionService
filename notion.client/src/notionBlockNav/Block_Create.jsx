@@ -39,6 +39,7 @@ export default function NavCreate() {
                 isCycled: false,
                 cycleRange: null,
                 weekDayRepeat: null,
+                targetDate: deadlineDate ? new Date(deadlineDate).toISOString() : null,
                 timeRepeat: deadlineDate ? toLocalTime(deadlineDate) : null,
             };
         }
@@ -54,6 +55,7 @@ export default function NavCreate() {
                 isCycled: false,
                 cycleRange: null,
                 weekDayRepeat: null,
+                targetDate: onceDate ? onceDate.toISOString() : null,
                 timeRepeat: onceDate ? toLocalTime(onceDate) : null,
             };
         }
@@ -64,7 +66,8 @@ export default function NavCreate() {
             isCycled: true,
             cycleRange,
             weekDayRepeat,
-            timeRepeat,
+            targetDate: null,
+            timeRepeat: timeRepeat || null,
         };
     }
 
