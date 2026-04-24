@@ -17,9 +17,13 @@ services:
   backend0:
     build: ./fastApi
     container_name: serverFastApi
+    depends_on:
+        - db
     restart: always
     ports:
       - "8001:8000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/app
 
   backend:
       build: ./notionservice
@@ -41,6 +45,13 @@ services:
       - "3000:5002"
     depends_on:
       - backend
+    
+  bot:
+    build: ./telegramBot
+    container_name: telegramBot
+    restart: always
+    depends_on:
+      - backend0
 
 volumes:
   postgres_data:
