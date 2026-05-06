@@ -24,21 +24,13 @@ app.add_middleware(
 async def startup():
     asyncio.create_task(time_service.start())
 
-@app.websocket("/auth/ws")
+@app.websocket("/api/ws")
 async def ws(websocket: WebSocket):
     await websocket.accept()
 
     while True:
         await websocket.send_json(time_service.get_time())
         await asyncio.sleep(1)
-
-class Wallet(BaseModel):
-    name: str = Field(min_length= 1)
-    amount: int = Field(gt=0)
-
-@app.post("/wallets/")
-def create_wallet(wallet: Wallet):
-    return wallet
 
 # @app.get("/balance")
 # def get_balance(wallet_name: str | None = None):
