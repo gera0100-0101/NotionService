@@ -1,6 +1,6 @@
 # models.py
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum, Time
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum, Time, ForeignKey
+from sqlalchemy.orm import declarative_base, relationship
 from datetime import datetime
 
 Base = declarative_base()
@@ -11,6 +11,9 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     email = Column(String, unique=True, nullable=False)
     name = Column(String(100))
+
+    notion = relationship("Notion", back_populates="users")
+    deadline = relationship("Deadline", back_populates="users")
 
 class Notion(Base):
     __tablename__ = "notion"
@@ -25,6 +28,10 @@ class Notion(Base):
     cycle_time = Column(Time, nullable=True)
     day_of_weak = Column(Enum("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", name="day_of_weak"), nullable=True)
     day_of_month = Column(Integer, nullable=True)
+
+    user_id = Column(Integer, ForeignKey("users.id"))
+
+    user = relationship("User", back_populates="notion")
     
 class Deadline(Base):
     __tablename__ = "deadline"
@@ -34,3 +41,7 @@ class Deadline(Base):
     description = Column(String, nullable=False)
     created_at = Column(DateTime, nullable=False)
     deadline_datetime = Column(DateTime, nullable=False)
+
+    user_id = Column(Integer, ForeignKey("users.id"))
+
+    user = relationship("User", back_populates="deadline")
