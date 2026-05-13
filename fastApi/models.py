@@ -12,8 +12,8 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     name = Column(String(100))
 
-    notion = relationship("Notion", back_populates="users")
-    deadline = relationship("Deadline", back_populates="users")
+    notion = relationship("Notion", back_populates="user")
+    deadline = relationship("Deadline", back_populates="user")
 
 class Notion(Base):
     __tablename__ = "notion"
