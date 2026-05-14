@@ -1,4 +1,4 @@
-from fastapi import FastAPI, WebSocket, Depends
+from fastapi import FastAPI, WebSocket, Depends, HTTPException
 from auth.hashing import hash_password
 #db
 from database import get_db
@@ -35,13 +35,19 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
     return {"message": "ok"}
 
-# @app.post("/login")
-# def login(user: UserLogin, db: Session = Depends(get_db)):
-#     db_user = (
-#         db.query(User).filter(User.email == user.email).first()
-#     )
+@app.post("/login")
+def login(user: UserLogin, db: Session = Depends(get_db)):
+    db_user = (
+        db.query(User).filter(User.email == user.email).first()
+    )
 
-#     if not db_user:
+    if not db_user:
+        raise HTTPException(
+            status_code=401,
+            detail="invalid credentials"
+        )
+    
+    #if not verify_password
 
 
 @app.on_event("startup")
