@@ -10,6 +10,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     email = Column(String, unique=True, nullable=False)
+    password = Column(String(100), unique=False, nullable=False)
     name = Column(String(100))
 
     notion = relationship("Notion", back_populates="user")

@@ -1,7 +1,8 @@
 from fastapi import FastAPI, WebSocket, Depends
+from auth.hashing import hash_password
 #db
 from database import get_db
-from schemas.user import UserRead, UserCreate
+from schemas.user import UserCreate, UserLogin
 from sqlalchemy.orm import Session
 from models import User
 #CORS
@@ -24,22 +25,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/user", response_model=UserRead)
+@app.post("/register")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    db_user = User(
-        name=user.name,
-        email=user.email
-    )
-    
+    hashed_password = hash_password(user.password)
+    db_user = User(email=user.email, password=hashed_password)
+
     db.add(db_user)
     db.commit()
-    db.refresh(db_user)
-    return db_user
 
-@app.get("/user")
-def get_users(db: Session = Depends(get_db)):
-    all_users = db.query(User).all()
-    return all_users
+    return {"message": "ok"}
+
+# @app.post("/login")
+# def login(user: UserLogin, db: Session = Depends(get_db)):
+#     db_user = (
+#         db.query(User).filter(User.email == user.email).first()
+#     )
+
+#     if not db_user:
+
 
 @app.on_event("startup")
 async def startup():
