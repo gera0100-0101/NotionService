@@ -15,7 +15,10 @@ class DeadlineShort(BaseModel):
 class UserCreate(BaseModel):
     name:str
     email:str
-    password:str
+    password:str = Field(
+        min_length=8,
+        max_length=72
+    )
 
 class UserLogin(BaseModel):
     email:str

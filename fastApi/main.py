@@ -1,5 +1,6 @@
-from fastapi import FastAPI, WebSocket, Depends, HTTPException
-from auth.hashing import hash_password
+from fastapi import FastAPI, WebSocket, Depends, HTTPException, Request
+from auth.hashing import hash_password, verify_password
+from auth.jwt import create_access_token
 #db
 from database import get_db
 from schemas.user import UserCreate, UserLogin
@@ -28,7 +29,7 @@ app.add_middleware(
 @app.post("/register")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     hashed_password = hash_password(user.password)
-    db_user = User(email=user.email, password=hashed_password)
+    db_user = User(name=user.name, email=user.email, password=hashed_password)
 
     db.add(db_user)
     db.commit()
@@ -44,11 +45,30 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     if not db_user:
         raise HTTPException(
             status_code=401,
-            detail="invalid credentials"
+            detail="invalid credentials(user has not been found)"
         )
     
-    #if not verify_password
+    if not verify_password(user.password, db_user.password):
+        raise HTTPException(
+            status_code=401,
+            detail="invalid credentials(wrong password)"
+        )
+    
+    token = create_access_token({"sub": str(db_user.id)})
 
+    return {
+    "access_token": token,
+    "token_type": "bearer"
+    }
+
+@app.get("/debug")
+def debug(request: Request):
+
+    print(request.headers)
+
+    return{
+        "headers": dict(request.headers)
+    }
 
 @app.on_event("startup")
 async def startup():
