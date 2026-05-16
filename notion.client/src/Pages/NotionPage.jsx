@@ -1,6 +1,6 @@
 import NotionBlock from '../NotionBlock'
 
-export default function CalendarPage() {
+export default function NotionPage() {
   return (
     <div>
       <NotionBlock></NotionBlock>

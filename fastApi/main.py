@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, Depends, HTTPException, Request
 from auth.hashing import hash_password, verify_password
-from auth.jwt import create_access_token
+from auth.jwt import create_access_token, get_current_user
 #db
 from database import get_db
 from schemas.user import UserCreate, UserLogin
@@ -35,6 +35,10 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db.commit()
 
     return {"message": "ok"}
+
+@app.get("/user_checkout")
+def user_checkout(user: User = Depends(get_current_user)):
+    return user
 
 @app.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
