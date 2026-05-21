@@ -6,59 +6,45 @@ import {
   Button,
   Fieldset
 } from "@mantine/core"
-import { useNavigate, Link, Route } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
-export default function Login() {
+export default function Register(){
     const navigate = useNavigate();
 
+    const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    useEffect(() => {
-        const token = localStorage.getItem(
-            "token"
-        )
-        console.log(token)
-    }, [])
+    const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    async function handleLogin(e) {
-        e.preventDefault()
+    await fetch("http://localhost:8001/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+      }),
+    });
 
-        const response = await fetch(
-        "http://localhost:8001/login",
-        {
-            method: "POST",
+    navigate("/login");
+  };
 
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                email,
-                password
-            })
-        })
-
-        const data = await response.json()
-        console.log(data)
-        localStorage.setItem("token", data.access_token)
-
-        const token = localStorage.getItem(
-            "token"
-        )
-
-        if(token && token !== "undefined"){
-            navigate("/")
-        }
-        else{
-            console.log(data)
-        }
-    }
-
-
-    return (
+  return (
         <form onSubmit={handleLogin}>
             <Fieldset legend="Login" bg="#192731" radius="xl" className="notionBlock">
+
+                <TextInput
+                label="Name"
+                placeholder="name"
+                value={name}
+                onChange={(e) =>
+                    setName(e.target.value)
+                }
+                />
 
                 <TextInput
                 label="Email"
@@ -84,9 +70,6 @@ export default function Login() {
                 >
                 Login
                 </Button>
-                <Link to="/register">
-                    Нет аккаунта?
-                </Link>
 
             </Fieldset>
         </form>
