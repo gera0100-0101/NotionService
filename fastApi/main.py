@@ -1,4 +1,4 @@
-from fastapi import FastAPI, WebSocket, Depends, HTTPException, Request
+from fastapi import FastAPI, WebSocket, Depends, HTTPException, Request, Body
 from auth.hashing import hash_password, verify_password
 from auth.jwt import create_access_token, get_current_user
 #db
@@ -36,9 +36,14 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
     return {"message": "ok"}
 
-@app.get("/user_checkout")
-def user_checkout(user: User = Depends(get_current_user)):
-    return user
+@app.post("/user_checkout")
+async def user_checkout(token: str = Body()):
+    is_user_exists = get_current_user(token)
+
+    if is_user_exists:
+        return True
+    else:
+        return False
 
 @app.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
