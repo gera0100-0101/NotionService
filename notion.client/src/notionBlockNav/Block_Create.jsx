@@ -6,9 +6,43 @@ import '@mantine/dates/styles.css';
 
 export default function NavCreate() {
     const [value, setValue] = useState("notion");
+    const token = localStorage.getItem("token");
+
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+    const [created_at, setCreated_at] = useState("");
+    const [notion_datetime, setNotion_datetime] = useState("");
+    const [is_cycle, setIs_cycle] = useState("");
+    const [cycle_type, setCycle_type] = useState("");
+    const [cycle_time, setCycle_time] = useState("");
+    const [day_of_weak, setDay_of_weak] = useState("");
+    const [day_of_month, setDay_of_month] = useState("");
+
+    async function handleCreate(){
+        const response = await fetch(
+            "http://localhost:8001/notion_create",
+        {
+            method="POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                name:name,
+                description:description,
+                created_at:created_at,
+                notion_datetime:notion_datetime,
+                is_cycle:is_cycle,
+                cycle_type:cycle_type,
+                cycle_time:cycle_time,
+                day_of_weak:day_of_weak,
+                day_of_month:day_of_month
+            })
+        })
+    }
 
   return (
-    <Fieldset legend="Создание" bg="#192731" radius="xl">
+    <Fieldset onSubmit={handleCreate} legend="Создание" bg="#192731" radius="xl">
         <TextInput label="Наименование" placeholder="Наименование" />
         <TextInput label="Описание" placeholder="Описание" mt="md" />
 
@@ -29,7 +63,7 @@ export default function NavCreate() {
         {value === "notion" && <NotionValue></NotionValue>}
         {value === "deadLine" && <DeadLineValue></DeadLineValue>}
       <Group justify="flex-end" mt="md">
-        <Button bg="#ff096c">Создать напоминание</Button>
+        <Button type="submit" bg="#ff096c">Создать напоминание</Button>
       </Group>
     </Fieldset>
   );

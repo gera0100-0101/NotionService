@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import datetime, time
 from enum import Enum
 
-class Notion(BaseModel):
+class NotionCreate(BaseModel):
     name:str
     description:str
     created_at:datetime

@@ -13,6 +13,11 @@
   align-items: center;
 }
 
+.active {
+  color: azure;
+  background: #ff096c;
+}
+
 .link {
   display: block;
   line-height: 1;

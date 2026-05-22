@@ -6,6 +6,8 @@ from services.register_token import register_token
 #db
 from database import get_db
 from schemas.user import UserCreate, UserLogin
+from schemas.notion import NotionCreate
+from models import Notion, User
 from sqlalchemy.orm import Session
 #CORS
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,6 +29,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.post("/notion_create")
+def create_notion(notion: NotionCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    db_notion = Notion(
+        name = notion.name,
+        description = notion.description,
+        created_at = notion.created_at,
+        notion_datetime = notion.notion_datetime,
+        is_cycle = notion.is_cycle,
+        cycle_type = notion.cycle_type,
+        cycle_time = notion.cycle_time,
+        day_of_weak = notion.day_of_weak,
+        day_of_month = notion.day_of_month,
+        user_id = current_user.id
+    )
+
+    db.add(db_notion)
+    db.commit()
+
 @app.post("/register")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     register_token(user, db)
@@ -41,6 +61,11 @@ async def user_checkout(token: str = Body()):
         return True
     else:
         return False
+
+@app.post("/user_check")
+async def user_checkout(token: str = Body()):
+    user = get_current_user(token)
+    return user
 
 @app.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
