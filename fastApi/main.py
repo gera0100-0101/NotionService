@@ -1,11 +1,12 @@
-from fastapi import FastAPI, WebSocket, Depends, HTTPException, Request, Body
-from auth.hashing import hash_password, verify_password
-from auth.jwt import create_access_token, get_current_user
+from fastapi import FastAPI, WebSocket, Depends, Request, Body
+from auth.jwt import get_current_user
+#services
+from services.login_token import login_token
+from services.register_token import register_token
 #db
 from database import get_db
 from schemas.user import UserCreate, UserLogin
 from sqlalchemy.orm import Session
-from models import User
 #CORS
 from fastapi.middleware.cors import CORSMiddleware
 #WS
@@ -28,11 +29,7 @@ app.add_middleware(
 
 @app.post("/register")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    hashed_password = hash_password(user.password)
-    db_user = User(name=user.name, email=user.email, password=hashed_password)
-
-    db.add(db_user)
-    db.commit()
+    register_token(user, db)
 
     return {"message": "ok"}
 
@@ -47,23 +44,7 @@ async def user_checkout(token: str = Body()):
 
 @app.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
-    db_user = (
-        db.query(User).filter(User.email == user.email).first()
-    )
-
-    if not db_user:
-        raise HTTPException(
-            status_code=401,
-            detail="invalid credentials(user has not been found)"
-        )
-    
-    if not verify_password(user.password, db_user.password):
-        raise HTTPException(
-            status_code=401,
-            detail="invalid credentials(wrong password)"
-        )
-    
-    token = create_access_token({"sub": str(db_user.id)})
+    token = login_token(user, db)
 
     return {
     "access_token": token,
