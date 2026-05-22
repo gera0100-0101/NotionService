@@ -34,7 +34,7 @@ export default function Register(){
   };
 
   return (
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit}>
             <Fieldset legend="Login" bg="#192731" radius="xl" className="notionBlock">
 
                 <TextInput

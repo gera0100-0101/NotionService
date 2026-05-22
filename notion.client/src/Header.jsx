@@ -3,31 +3,31 @@ import { Burger, Container, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { MantineLogo } from '@mantinex/mantine-logo'
 import classes from './Header.module.css';
+import { Link, NavLink } from "react-router-dom";
 
 const links = [
-  { link: '/about', label: 'Календарь' },
-  { link: '/pricing', label: 'Заметки' },
-  { link: '/learn', label: 'AI' },
-  { link: '/community', label: 'Поддержка' },
+  { link: '/', label: 'Напоминания' },
+  { link: '/calendar', label: 'Календарь' },
+  { link: '/ai', label: 'AI' },
+  { link: '/support', label: 'Поддержка' },
+  { link: '/logout', label: 'Выйти'}
 ];
 
 export function HeaderSimple() {
   const [opened, { toggle }] = useDisclosure(false);
-  const [active, setActive] = useState(links[0].link);
 
   const items = links.map((link) => (
-    <a
+    <NavLink
       key={link.label}
-      href={link.link}
-      className={classes.link}
-      data-active={active === link.link || undefined}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(link.link);
-      }}
-    >
+      to={link.link}
+      className={({ isActive }) =>
+        isActive
+          ? `${classes.link} ${classes.active}`
+          : classes.link
+        }
+      >
       {link.label}
-    </a>
+    </NavLink>
   ));
 
   return (
