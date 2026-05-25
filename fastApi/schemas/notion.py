@@ -1,25 +1,25 @@
 from pydantic import BaseModel
 from datetime import datetime, time
 from enum import Enum
+from typing import Optional
 
 class NotionCreate(BaseModel):
     name:str
     description:str
-    created_at:datetime
     notion_datetime:datetime
     is_cycle:bool
-    cycle_type:"CycleType"
-    cycle_time:time
-    day_of_weak:"DayOfWeak"
-    day_of_month:int
+    cycle_type: Optional["CycleType"] = None
+    cycle_time: Optional[time] = None
+    day_of_weak: Optional["DayOfWeak"] = None
+    day_of_month: Optional[int] = None
 
     class Config:
         orm_mode = True
 
 class CycleType(str, Enum):
-    everyDay = "everyDay"
-    everyWeak = "everyWeak"
-    everyMonth = "everyMonth"
+    everyDay = "everyday"
+    everyWeak = "everydeak"
+    everyMonth = "everymonth"
 
 class DayOfWeak(str, Enum):
     monday = "monday"

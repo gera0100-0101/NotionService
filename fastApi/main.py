@@ -34,14 +34,14 @@ def create_notion(notion: NotionCreate, current_user: User = Depends(get_current
     db_notion = Notion(
         name = notion.name,
         description = notion.description,
-        created_at = notion.created_at,
+        created_at = time_service.get_time()["dateTime"],
         notion_datetime = notion.notion_datetime,
         is_cycle = notion.is_cycle,
         cycle_type = notion.cycle_type,
         cycle_time = notion.cycle_time,
         day_of_weak = notion.day_of_weak,
         day_of_month = notion.day_of_month,
-        user_id = current_user.id
+        user_id = current_user
     )
 
     db.add(db_notion)

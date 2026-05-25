@@ -6,10 +6,10 @@ import { create } from "zustand"
 import '@mantine/dates/styles.css';
 
 export const useStore = create((set) => ({
-    is_cycle: "", setIs_cycle: (value) => set({is_cycle: value}),
+    is_cycle: false, setIs_cycle: (value) => set({is_cycle: value}),
     notion_datetime: "", setNotion_datetime: (value) => set({notion_datetime: value}),
     cycle_type: "", setCycle_type: (value) => set({cycle_type: value}),
-    cycle_time: "", setCycle_time: (value) => set({cycle_time: value}),
+    cycle_time: "", setCycle_time: (value) => set({ cycle_time: value || "" }),
     day_of_weak: "", setDay_of_weak: (value) => set({day_of_weak: value}),
     day_of_month: "", setDay_of_month: (value) => set({day_of_month: value}),
 }))
@@ -20,22 +20,32 @@ export default function NavCreate() {
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [created_at, setCreated_at] = useState("");
 
     const notion_datetime = useStore((state) => state.notion_datetime)
     const is_cycle = useStore((state) => state.is_cycle)
+    
     const cycle_type = useStore((state) => state.cycle_type)
+    const setCycle_type = useStore((state) => state.setCycle_type)
     const cycle_time = useStore((state) => state.cycle_time)
+    const setCycle_time = useStore((state) => state.setCycle_time)
     const day_of_weak = useStore((state) => state.day_of_weak)
+    const setDay_of_weak = useStore((state) => state.setDay_of_weak)
     const day_of_month = useStore((state) => state.day_of_month)
-    //const [notion_datetime, setNotion_datetime] = useState("");
-    //const [is_cycle, setIs_cycle] = useState("");
-    // const [cycle_type, setCycle_type] = useState("");
-    // const [cycle_time, setCycle_time] = useState("");
-    // const [day_of_weak, setDay_of_weak] = useState("");
-    // const [day_of_month, setDay_of_month] = useState("");
+    const setDay_of_month = useStore((state) => state.setDay_of_month)
 
     async function notion_handleCreate(){
+        
+        const body = {
+            name,
+            description,
+            notion_datetime,
+            is_cycle,
+            cycle_type: cycle_type || null,
+            cycle_time: cycle_time || null,
+            day_of_weak: day_of_weak || null,
+            day_of_month: day_of_month || null,
+        };
+
         const response = await fetch(
             "http://localhost:8001/notion_create",
         {
@@ -44,17 +54,7 @@ export default function NavCreate() {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({
-                name:name,
-                description:description,
-                created_at:created_at,
-                notion_datetime:notion_datetime,
-                is_cycle:is_cycle,
-                cycle_type:cycle_type,
-                cycle_time:cycle_time,
-                day_of_weak:day_of_weak,
-                day_of_month:day_of_month
-            })
+            body: JSON.stringify(body)
         })
     }
 
@@ -119,22 +119,19 @@ export default function NavCreate() {
 }
 
 function NotionValue(){
-    const [checked, setChecked] = useState(false);
     const is_cycle = useStore((state) => state.is_cycle)
     const setIs_cycle = useStore((state) => state.setIs_cycle)
 
     return(
         <div>
             <Switch mt="lg" color="#ff096c"
-                value={is_cycle}
-                onChange={setIs_cycle}
-                checked={checked}
-                onChange={(event) => setChecked(event.currentTarget.checked)}
+                checked={is_cycle}
+                onChange={(event) => setIs_cycle(event.currentTarget.checked)}
                 label="Цикличное напоминание"
             />
 
-            {checked === false && <OnceNotion></OnceNotion>}
-            {checked === true && <LoopNotion></LoopNotion>}
+            {is_cycle === false && <OnceNotion></OnceNotion>}
+            {is_cycle === true && <LoopNotion></LoopNotion>}
 
         </div>
     )
@@ -193,46 +190,55 @@ function LoopNotion(){
                 color: 'white',
                 },
             }}
-            value={cycle_type}
-            onChange={setCycle_type}
+            value={cycle_type || ""}
+            onChange={(v) => setCycle_type(v)}
             data={[
-                {label: "Ежедневно", value: "everyDay"},
-                {label: "Еженедельно", value: "everyWeek"},
-                {label: "Ежемесячно", value: "everyMonth"}
+                {label: "Ежедневно", value: "everyday"},
+                {label: "Еженедельно", value: "everyweek"},
+                {label: "Ежемесячно", value: "everymonth"}
                 ]} 
         />
 
-        {cycle_type === "everyDay" && 
+        {cycle_type === "everyday" && 
             <TimeInput mt="lg"
-            value={cycle_time}
-            onChange={setCycle_time}
+            value={cycle_time || ""}
+            onChange={(value) => {
+                const time = value ? value.toTimeString().slice(0, 5) : "";
+                setCycle_time(time);
+            }}
             label="Введите время"
             />
         }
-        {cycle_type === "everyWeek" &&
+        {cycle_type === "everyweek" &&
             <div>
                 <NativeSelect label="Выберите день недели" mt="lg"
-                value={day_of_weak}
-                onChange={setDay_of_weak}
+                value={day_of_weak || ""}
+                onChange={(event) => setDay_of_weak(event.currentTarget.value)}
                 data={['Понедельник', 'Вторник', 'Среда', "Четверг", "Пятница", "Суббота", "Воскресенье"]} 
                 />
                 <TimeInput mt="lg"
-                value={cycle_time}
-                onChange={setCycle_time}
+                value={cycle_time || ""}
+                onChange={(value) => {
+                    const time = value ? value.toTimeString().slice(0, 5) : "";
+                    setCycle_time(time);
+                }}
                 label="Введите время"
                 />
             </div>
         }
-        {cycle_type === "everyMonth" &&
+        {cycle_type === "everymonth" &&
             <div>
                 <NativeSelect label="Выберите день месяца" mt="lg"
-                value={day_of_month}
-                onChange={setDay_of_month}
+                value={day_of_month || ""}
+                onChange={(event) => setDay_of_month(event.currentTarget.value)}
                 data={days} 
                 />
                 <TimeInput mt="lg"
-                value={cycle_time}
-                onChange={setCycle_time}
+                value={cycle_time || ""}
+                onChange={(value) => {
+                    const time = value ? value.toTimeString().slice(0, 5) : "";
+                    setCycle_time(time);
+                }}
                 label="Введите время"
                 />
             </div>
