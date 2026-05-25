@@ -1,5 +1,5 @@
 # models.py
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum, Time, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Time, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
 from datetime import datetime
 
@@ -25,9 +25,9 @@ class Notion(Base):
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     notion_datetime = Column(DateTime, nullable=True)
     is_cycle = Column(Boolean, nullable=False)
-    cycle_type = Column(Enum("everyday", "everyweak", "everymonth", name="cycle_type"))
+    cycle_type = Column(String, nullable=True)
     cycle_time = Column(Time, nullable=True)
-    day_of_weak = Column(Enum("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", name="day_of_weak"), nullable=True)
+    day_of_week = Column(String, nullable=True)
     day_of_month = Column(Integer, nullable=True)
 
     user_id = Column(Integer, ForeignKey("users.id"))

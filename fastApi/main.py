@@ -3,6 +3,7 @@ from auth.jwt import get_current_user
 #services
 from services.login_token import login_token
 from services.register_token import register_token
+from services.notion_register import notion_register
 #db
 from database import get_db
 from schemas.user import UserCreate, UserLogin
@@ -31,21 +32,47 @@ app.add_middleware(
 
 @app.post("/notion_create")
 def create_notion(notion: NotionCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    db_notion = Notion(
-        name = notion.name,
-        description = notion.description,
-        created_at = time_service.get_time()["dateTime"],
-        notion_datetime = notion.notion_datetime,
-        is_cycle = notion.is_cycle,
-        cycle_type = notion.cycle_type,
-        cycle_time = notion.cycle_time,
-        day_of_weak = notion.day_of_weak,
-        day_of_month = notion.day_of_month,
-        user_id = current_user
-    )
+    notion_register(current_user, db, time_service.get_time()["dateTime"], notion)
+    
+    return {"message": "ok"}
 
-    db.add(db_notion)
-    db.commit()
+    # if notion.is_cycle:
+    #     if notion.cycle_time == None | notion.cycle_time == "":
+    #         raise HTTPException(
+    #         status_code=401,
+    #         detail="variable cycle_time shouldn't be empty"
+    #     )
+    #     if notion.cycle_type == None:
+    #         raise HTTPException(
+    #         status_code=401,
+    #         detail="variable cycle_type shouldn't be empty"
+    #     )
+    #     if notion.day_of_weak == None | notion.day_of_weak == "":
+    #         raise HTTPException(
+    #         status_code=401,
+    #         detail="variable day_of_weak shouldn't be empty"
+    #     )
+    #     if notion.day_of_month == None | notion.day_of_month == "":
+    #         raise HTTPException(
+    #         status_code=401,
+    #         detail="variable day_of_month shouldn't be empty"
+    #     )
+
+    # db_notion = Notion(
+    #     name = notion.name,
+    #     description = notion.description,
+    #     created_at = time_service.get_time()["dateTime"],
+    #     notion_datetime = notion.notion_datetime,
+    #     is_cycle = notion.is_cycle,
+    #     cycle_type = notion.cycle_type,
+    #     cycle_time = notion.cycle_time,
+    #     day_of_weak = notion.day_of_weak,
+    #     day_of_month = notion.day_of_month,
+    #     user_id = current_user
+    # )
+
+    # db.add(db_notion)
+    # db.commit()
 
 @app.post("/register")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):

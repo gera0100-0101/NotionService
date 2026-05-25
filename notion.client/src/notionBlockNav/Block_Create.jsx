@@ -10,8 +10,8 @@ export const useStore = create((set) => ({
     notion_datetime: "", setNotion_datetime: (value) => set({notion_datetime: value}),
     cycle_type: "", setCycle_type: (value) => set({cycle_type: value}),
     cycle_time: "", setCycle_time: (value) => set({ cycle_time: value || "" }),
-    day_of_weak: "", setDay_of_weak: (value) => set({day_of_weak: value}),
-    day_of_month: "", setDay_of_month: (value) => set({day_of_month: value}),
+    day_of_week: "monday", setDay_of_week: (value) => set({day_of_week: value}),
+    day_of_month: "1", setDay_of_month: (value) => set({day_of_month: value}),
 }))
 
 export default function NavCreate() {
@@ -28,8 +28,8 @@ export default function NavCreate() {
     const setCycle_type = useStore((state) => state.setCycle_type)
     const cycle_time = useStore((state) => state.cycle_time)
     const setCycle_time = useStore((state) => state.setCycle_time)
-    const day_of_weak = useStore((state) => state.day_of_weak)
-    const setDay_of_weak = useStore((state) => state.setDay_of_weak)
+    const day_of_week = useStore((state) => state.day_of_week)
+    const setday_of_week = useStore((state) => state.setday_of_week)
     const day_of_month = useStore((state) => state.day_of_month)
     const setDay_of_month = useStore((state) => state.setDay_of_month)
 
@@ -38,11 +38,11 @@ export default function NavCreate() {
         const body = {
             name,
             description,
-            notion_datetime,
+            notion_datetime: notion_datetime || null,
             is_cycle,
             cycle_type: cycle_type || null,
             cycle_time: cycle_time || null,
-            day_of_weak: day_of_weak || null,
+            day_of_week: day_of_week || null,
             day_of_month: day_of_month || null,
         };
 
@@ -75,7 +75,7 @@ export default function NavCreate() {
             //     is_cycle:is_cycle,
             //     cycle_type:cycle_type,
             //     cycle_time:cycle_time,
-            //     day_of_weak:day_of_weak,
+            //     day_of_week:day_of_week,
             //     day_of_month:day_of_month
             // })
         })
@@ -172,8 +172,8 @@ function LoopNotion(){
     const setCycle_type = useStore((state) => state.setCycle_type)
     const cycle_time = useStore((state) => state.cycle_time)
     const setCycle_time = useStore((state) => state.setCycle_time)
-    const day_of_weak = useStore((state) => state.day_of_weak)
-    const setDay_of_weak = useStore((state) => state.setDay_of_weak)
+    const day_of_week = useStore((state) => state.day_of_week)
+    const setDay_of_week = useStore((state) => state.setDay_of_week)
     const day_of_month = useStore((state) => state.day_of_month)
     const setDay_of_month = useStore((state) => state.setDay_of_month)
 
@@ -181,7 +181,7 @@ function LoopNotion(){
     value: String(i + 1),
     label: String(i + 1),
     }));
-    
+
     return(
         <div>
             <SegmentedControl size="md" mt="lg" bg="#2a3843" color="#ff096c"
@@ -202,26 +202,28 @@ function LoopNotion(){
         {cycle_type === "everyday" && 
             <TimeInput mt="lg"
             value={cycle_time || ""}
-            onChange={(value) => {
-                const time = value ? value.toTimeString().slice(0, 5) : "";
-                setCycle_time(time);
-            }}
+            onChange={(event) => setCycle_time(event.currentTarget.value)}
             label="Введите время"
             />
         }
         {cycle_type === "everyweek" &&
             <div>
                 <NativeSelect label="Выберите день недели" mt="lg"
-                value={day_of_weak || ""}
-                onChange={(event) => setDay_of_weak(event.currentTarget.value)}
-                data={['Понедельник', 'Вторник', 'Среда', "Четверг", "Пятница", "Суббота", "Воскресенье"]} 
+                value={day_of_week || ""}
+                onChange={(event) => setDay_of_week(event.currentTarget.value)}
+                data={[
+                    { label: "Понедельник", value: "monday" },
+                    { label: "Вторник", value: "tuesday" },
+                    { label: "Среда", value: "wednesday" },
+                    { label: "Четверг", value: "thursday" },
+                    { label: "Пятница", value: "friday" },
+                    { label: "Суббота", value: "saturday" },
+                    { label: "Воскресенье", value: "sunday" }
+                ]}
                 />
                 <TimeInput mt="lg"
                 value={cycle_time || ""}
-                onChange={(value) => {
-                    const time = value ? value.toTimeString().slice(0, 5) : "";
-                    setCycle_time(time);
-                }}
+                onChange={(event) => setCycle_time(event.currentTarget.value)}
                 label="Введите время"
                 />
             </div>
@@ -235,10 +237,7 @@ function LoopNotion(){
                 />
                 <TimeInput mt="lg"
                 value={cycle_time || ""}
-                onChange={(value) => {
-                    const time = value ? value.toTimeString().slice(0, 5) : "";
-                    setCycle_time(time);
-                }}
+                onChange={(event) => setCycle_time(event.currentTarget.value)}
                 label="Введите время"
                 />
             </div>
