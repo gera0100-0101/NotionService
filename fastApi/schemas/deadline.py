@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime, time
 
-class Deadline(BaseModel):
+class DeadlineCreate(BaseModel):
     name:str
     description:str
     created_at:datetime
