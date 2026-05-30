@@ -12,6 +12,7 @@ export const useStore = create((set) => ({
     cycle_time: "", setCycle_time: (value) => set({ cycle_time: value || "" }),
     day_of_week: "monday", setDay_of_week: (value) => set({day_of_week: value}),
     day_of_month: "1", setDay_of_month: (value) => set({day_of_month: value}),
+    deadline_datetime: "", setDeadline_datetime: (value) => set({deadline_datetime: value}),
 }))
 
 export default function NavCreate() {
@@ -32,6 +33,8 @@ export default function NavCreate() {
     const setday_of_week = useStore((state) => state.setday_of_week)
     const day_of_month = useStore((state) => state.day_of_month)
     const setDay_of_month = useStore((state) => state.setDay_of_month)
+    const deadline_datetime = useStore((state) => state.deadline_datetime)
+    const setDeadline_datetime = useStore((state) => state.setDeadline_datetime)
 
     async function notion_handleCreate(){
         
@@ -59,6 +62,13 @@ export default function NavCreate() {
     }
 
     async function deadLine_handleCreate() {
+
+        const body = {
+            name,
+            description,
+            deadline_datetime
+        };
+
         const response = await fetch(
             "http://localhost:8001/deadline_create",
         {
@@ -67,17 +77,7 @@ export default function NavCreate() {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            // body: JSON.stringify({
-            //     name:name,
-            //     description:description,
-            //     created_at:created_at,
-            //     notion_datetime:notion_datetime,
-            //     is_cycle:is_cycle,
-            //     cycle_type:cycle_type,
-            //     cycle_time:cycle_time,
-            //     day_of_week:day_of_week,
-            //     day_of_month:day_of_month
-            // })
+            body: JSON.stringify(body)
         })
     }
 
@@ -249,8 +249,13 @@ function LoopNotion(){
 
 
 function DeadLineValue(){
+    const deadline_datetime = useStore((state) => state.deadline_datetime)
+    const setDeadline_datetime = useStore((state) => state.setDeadline_datetime)
+
     return(
         <DateTimePicker label="Выберите дату дедлайна" placeholder="Нажмите что бы выбрать дату" mt="lg"
+            value={deadline_datetime}
+            onChange={setDeadline_datetime}
             styles={{
                 calendarHeader:{
                     color: "black"
