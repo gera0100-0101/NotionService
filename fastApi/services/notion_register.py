@@ -9,7 +9,6 @@ def notion_register(user: int, db: Session, time: str, notion: NotionCreate):
         if value is None or value == "":
             raise HTTPException(status_code=401, detail=message)
 
-
     require(notion.name, "variable name shouldn't be empty")
 
     if notion.is_cycle:

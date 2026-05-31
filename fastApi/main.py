@@ -12,6 +12,7 @@ from schemas.notion import NotionCreate
 from schemas.deadline import DeadlineCreate
 from models import Notion, User
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 #CORS
 from fastapi.middleware.cors import CORSMiddleware
 #WS
@@ -37,6 +38,13 @@ def create_notion(notion: NotionCreate, current_user: User = Depends(get_current
     notion_register(current_user, db, time_service.get_time()["dateTime"], notion)
     
     return {"message": "ok"}
+
+@app.get("/notion_get_all")
+def get_all_notion(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    stmt  = select(Notion).where(Notion.user_id == current_user)
+    result = db.execute(stmt)
+    notions = result.scalars().all()
+    return notions
 
 @app.post("/deadline_create")
 def create_deadline(deadline: DeadlineCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):

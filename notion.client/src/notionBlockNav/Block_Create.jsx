@@ -167,7 +167,6 @@ function OnceNotion(){
 }
 
 function LoopNotion(){
-    // const [value, setValue] = useState("everyDay");
     const cycle_type = useStore((state) => state.cycle_type)
     const setCycle_type = useStore((state) => state.setCycle_type)
     const cycle_time = useStore((state) => state.cycle_time)
